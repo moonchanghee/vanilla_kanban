@@ -1,0 +1,1 @@
+(()=>{"use strict";class e extends Component{}new e(document.querySelector("#root"))})();
