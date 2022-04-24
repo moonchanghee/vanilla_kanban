@@ -20,6 +20,11 @@ header {
     border: solid 2px;
     border-radius: 17px;
 }
+.head-selectbox{
+    float: left;
+    margin-left: 6%;
+}
+
 
 .head-title{
     font-weight: bold;
