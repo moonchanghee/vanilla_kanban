@@ -1,10 +1,11 @@
 export default function Item(e){
     return `
-<div class = "add" id = ${e} draggable="true" >
-    제목 : 제목
-    생성일 : 생성일
-    완료일 :완료일ㅇㄹㅇ 
-    <button class = "addbtn">버튼</button>
+<div class = "todoItem" id = ${e.id} draggable="true" >
+    제목 :  ${e.item_title} 
+    생성일 : ${e.item_date} 
+    내용 :${e.item_content} 
+    우선순위 : ${e.item_priority} 
+    <button class = "addbtn">삭제</button>
     <button class = "upbtn">수정</button>
 </div>
 <div class = "dropzone"> </div>
