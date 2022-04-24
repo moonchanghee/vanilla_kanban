@@ -9,7 +9,6 @@
 <header>
     <div class="head-container">
         <div class="head-title">To Do 칸반보드</div>
-<!--        <div class="head-button"><div onclick= "addBtn();">추가</div></div>-->
         <div class="head-button"><div class = "headBtn">추가</div></div>
     </div>
 </header>
@@ -19,18 +18,15 @@
         <div class="content">
             <div class="todo">
                 <div class = "item item-todo">todo</div>
-                <div>dd</div>
-                <div>ddd</div>
+                <div class="dropzone"></div>
             </div>
             <div class="inprogress">
                 <div class = "item item-inprogress">In Progress</div>
-                <div>dd</div>
-                <div>ddd</div>
+                <div class="dropzone"></div>
             </div>
             <div class="done">
                 <div class = "item item-done">Done</div>
-                <div>dd</div>
-                <div>ddd</div>
+                <div class="dropzone"></div>
             </div>
         </div>
     </div>
@@ -42,7 +38,7 @@
     <div class="modal-title">제목 : <input type="text"></div>
     <div class="modal-date">완료일 <input type="text"> <button id = selectDate>달력선택</button></div>
     <div class="modal-selectbox">우선순위
-        <select>
+        <select id = "modal-priority">
             <option selected>선택</option>
             <option>높은</option>
             <option>중간</option>
@@ -57,7 +53,8 @@
         </select>
     </div>
     <p><textarea cols="45" rows="10"></textarea></p>
-    <button onclick= "closeBtn();" >전송완료</button>
+<!--    <button onclick= "closeBtn();" >전송완료</button>-->
+    <div class = "closeBtn" >전송완료</div>
 </div>
 </div>
 
