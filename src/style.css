@@ -114,19 +114,19 @@ header {
     font-weight: bold;
 }
 
-.add{
+.todoItem{
     border: 2px solid;
     padding: 10px 10px;
     margin: 2px 2px;
     font-weight: bold;
 }
 .dropzone{
-    height: 5px;
+    height: 7px;
     transition: background 0.15s, height 0.15s;
 }
 
-.kanban__dropzone--active {
-    height: 12px;
+.dropzone_active {
+    height: 25px;
     background: rgba(0, 0, 0, 0.25);
 }
 .hidden {
