@@ -1,4 +1,5 @@
 import Controller from './controller'
+import Model from './model'
 import './style.css'
 
 class App{
