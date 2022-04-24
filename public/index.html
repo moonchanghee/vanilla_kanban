@@ -10,12 +10,19 @@
     <div class="head-container">
         <div class="head-title">To Do 칸반보드</div>
         <div class="head-button"><div class = "headBtn">추가</div></div>
+        <div class="head-selectbox">우선순위
+            <select class = "select">
+                <option selected>선택</option>
+                <option class = "sel_high">우선순위 높은순</option>
+                <option class = "sel_low">우선순위 낮은순</option>
+            </select>
+        </div>
     </div>
 </header>
 
 <section>
     <div class="kanban_wrap">
-        <div class="content">
+        <div class="content" id=" test">
             <div class="todo">
                 <div class = "item item-todo">todo</div>
                 <div class="dropzone"></div>
@@ -40,9 +47,9 @@
     <div class="modal-selectbox">우선순위
         <select id = "modal-priority">
             <option selected>선택</option>
-            <option>높은</option>
-            <option>중간</option>
-            <option>낮음</option>
+            <option value="3">높음</option>
+            <option value="2">중간</option>
+            <option value="1">낮음</option>
         </select>
         상태
         <select id = "modal-state">
