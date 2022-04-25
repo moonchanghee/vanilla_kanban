@@ -10,6 +10,4 @@ export default function Item(e){
 </div>
 <div class = "dropzone"> </div>
 `;
-
-
 }
