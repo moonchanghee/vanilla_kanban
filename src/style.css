@@ -36,21 +36,21 @@ header {
     margin-top: 80px;
 }
 
-.todo {
+.Todo {
     display: inline-block;
     width: 200px;
     height: 30px;
     border: 2px solid black;
 }
 
-.inprogress {
+.In_progress {
     display: inline-block;
     width: 200px;
     height: 30px;
     border: 2px solid black;
 }
 
-.done {
+.Done {
     display: inline-block;
     width: 200px;
     height: 30px;
