@@ -10,6 +10,7 @@ const title = document.querySelector("#title")
 const date = document.querySelector("#date")
 const kanban_wrap = document.querySelector(".kanban_wrap")
 const select = document.querySelector(".select")
+const dropzone = document.querySelectorAll(".dropzone")
 
 import Item from './view/Item'
 import Model from './model'
@@ -18,6 +19,7 @@ import Modal from './view/Modal'
 export default class controller {
     constructor() {
         this.model = new Model()
+        this.addEvent()
         this.onClickAddButton()
         this.onClickUpdateButton()
         this.onChangeSortSelect()
@@ -26,6 +28,19 @@ export default class controller {
         this.onClickDeleteButton()
         this.getItemList()
     }
+
+
+    addEvent(){
+        dropzone.forEach(e => {
+            this.dropzoneAddEvent(e)
+        })
+    }
+
+
+    // removeAllList(){
+    //
+    // }
+
 
 
 
@@ -38,7 +53,7 @@ export default class controller {
             }else if(sort_name == "sel_low"){
                 this.model.sortItemList("low")
             }
-            location.reload()
+            this.removeAllList()
         })
     }
 
@@ -79,7 +94,8 @@ export default class controller {
             if(e.target.className  == "succBtn"){
                 this.model.updateItem(id, data[0])
                 modal.classList.add('hidden');
-                location.reload()
+
+                // location.reload()
             }
         })
     }
@@ -112,35 +128,38 @@ export default class controller {
                     }})
         }
 
-    drag_drop(){
-        var pre_id
-        document.body.childNodes[3].querySelectorAll(".dropzone").forEach((e) => {
-            e.addEventListener("dragover" , (e) => {
-                e.preventDefault();
-                e.target.classList.add("dropzone_active")
-            })
-            e.addEventListener("dragleave" , (e) => {
-                e.target.classList.remove("dropzone_active")
-            })
-            e.addEventListener("drop" , (e) => {
-                e.preventDefault();
-                e.target.classList.remove("dropzone_active")
-                var move_state = e.path[0].id
-                let data = this.model.selectItem(pre_id)
-                if(data){
-                    this.removeItem(pre_id)
-                    data.item_state = move_state
-                    this.model.insertItems(data,move_state)
-                    location.reload()
-                }
-            })
+    dragStart(node){
+        node.childNodes[1].addEventListener("dragstart" , (e) => {
+            document.cookie = "drag_id" + "=" + e.target.id
         })
-        document.body.childNodes[3].querySelectorAll(".todoItem").forEach((e) => {
-            e.addEventListener("dragstart" , (e) => {
-                pre_id = e.target.id
-            })
-        })
+        this.dropzoneAddEvent(node.childNodes[3])
     }
+
+
+    dropzoneAddEvent(e){
+        e.addEventListener("dragover" , (e) => {
+            e.preventDefault();
+            e.target.classList.add("dropzone_active")
+        })
+        e.addEventListener("dragleave" , (e) => {
+            e.target.classList.remove("dropzone_active")
+        })
+        e.addEventListener("drop" , (e) => {
+            e.preventDefault();
+            e.target.classList.remove("dropzone_active")
+            var move_state = e.path[0].id
+            let pre_id = document.cookie.split('=')[1]
+            let data = this.model.selectItem(pre_id)
+            if(data){
+                this.removeItem(pre_id)
+                data.item_state = move_state
+                this.model.insertItems(data, move_state)
+                this.addItems(data)
+            }
+        })
+
+    }
+
 
     getItemList(){
         this.model.getItems().forEach((e) => {
@@ -171,7 +190,7 @@ export default class controller {
         let addItem = document.createElement("div")
         addItem.innerHTML = Item(s, s.item_state)
         state.appendChild(addItem)
-        this.drag_drop()
+        this.dragStart(state.appendChild(addItem))
     }
 
     uuid () {

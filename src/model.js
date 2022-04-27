@@ -2,17 +2,13 @@
 export default class Model{
 
     insertItems(d,state){
-        console.log("d" , d, state)
         const data = this.read();
         const item = data.find(e => e.id == state)
         item.items.push(d)
         this.save(data)
-        return this.read();
+        // return this.read();
     }
 
-    modalInsertItem(){
-
-    }
 
 
 

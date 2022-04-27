@@ -10,4 +10,6 @@ export default function Item(e,state){
 </div>
 <div class = "dropzone" id = ${state}> </div>
 `;
-}경
+}
+
+
