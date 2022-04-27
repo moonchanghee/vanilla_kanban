@@ -27,7 +27,6 @@ export default class controller {
         this.onChangeSortSelect()
         this.onClickCloseModal()
         this.upDateModal()
-        // this.onClickUpdateModal()
         this.onClickDeleteButton()
         this.getItemList()
         this.onRerender()
@@ -39,8 +38,6 @@ export default class controller {
             this.dropzoneAddEvent(e)
         })
     }
-
-
 
     selectChange(){
         select.addEventListener('change',(e) => {
@@ -84,7 +81,8 @@ export default class controller {
                 title.value = updateData.item_title
                 modal_contents.value = updateData.item_content
                 date.value = updateData.item_date
-                console.log("수정버튼 클릭", e.path[1].id)
+                modal_priority.options[modal_priority.selectedIndex].text = updateData.item_priority
+                modal_state.options[modal_state.selectedIndex].text = updateData.item_state
                 this.modal_id = e.path[1].id
             }
         })
