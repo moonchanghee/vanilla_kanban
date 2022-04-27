@@ -2,71 +2,84 @@
 export default class Model{
 
     insertItems(d,state){
-
+        console.log("d" , d, state)
         const data = this.read();
-        const column = data.find(e => e.id == state)
-        column.items.push(d)
+        const item = data.find(e => e.id == state)
+        item.items.push(d)
         this.save(data)
-        return d
+        return this.read();
     }
+
+    modalInsertItem(){
+
+    }
+
+
+
     getItems(){
         const data = this.read()
         return data
     }
+
     selectItem(itemId){
-        const data = this.read().find(e => e[0].id == itemId)
-        return data[0]
-    }
-
-    updateItem(itemId , newData){
-        const upDateData = this.read().find(e => e[0].id == itemId)
-        // upDateData.item_content = newData.item_content
-        // upDateData.item_title = newData.item_title
-        // upDateData.item_date = newData.item_date
-        // upDateData.item_state = newData.item_state
-        // upDateData.item_priority = newData.item_priority
-    }
-
-    sortItemList(e){
-        const data = this.read();
-
-        if(e == "low"){
-            data.forEach((e) => {
-                e.items.sort((a,b) => {
-                    return (Number(a[0].item_priority_val) - Number(b[0].item_priority_val))
-                })
-            })
-        }else if(e == "high"){
-            data.forEach((e) => {
-                e.items.sort((a,b) => {
-                    return (Number(b[0].item_priority_val) - Number(a[0].item_priority_val))
-                })
-            })
-        }
-
-        this.save(data);
-
-    }
-
-
-
-
-    deleteItem(itemId) {
-        const data = this.read();
-
+        const data = this.read()
+        let selectData
         data.forEach((e) => {
             for(let i =0 ; i<e.items.length; i++){
-                if(e.items[i][0].id == itemId ){
-                    console.log("d",e.items[i][0].id)
-                    e.items.splice(e.items.indexOf(e.items[i][0].id),1)
-                    //삭제 수정
+                if(e.items[i].id == itemId ){
+                    selectData = e.items[i]
+                    return
                 }
             }
         })
+    return selectData
+
+    }
+
+    updateItem(itemId , newData){
+        const data = this.read()
+        data.forEach((e) => {
+            for(let i =0 ; i<e.items.length; i++){
+                if(e.items[i].id == itemId ){
+                    e.items[i].item_content = newData.item_content
+                    e.items[i].item_title = newData.item_title
+                    e.items[i].item_date = newData.item_date
+                    // e.items[i].item_priority = newData.item_priority
+                    // e.items[i].item_state = newData.item_state
+                }
+            }
+        })
+        this.save(data)
+    }
+
+    sortItemList(s){
+        const data = this.read();
+            data.forEach((e) => {
+                e.items.sort((a,b) => {
+                    if(s == "low"){
+                        return (Number(a.item_priority_val) - Number(b.item_priority_val))
+                    }else{
+                        return (Number(b.item_priority_val) - Number(a.item_priority_val))
+                    }
+                })
+            })
         this.save(data);
     }
 
-    read = () => {
+    deleteItem(itemId) {
+        const data = this.read();
+        let chData
+        for (const column of data) {
+            chData = column.items.find(item => item.id == itemId);
+            if (chData) {
+                column.items.splice(column.items.indexOf(chData), 1);
+            }
+        }
+        this.save(data);
+    }
+
+
+    read(){
         const json = localStorage.getItem("kanban-data");
         if (!json) {
             return [{id : "ToDo" , items: [] } , {id : "In_progress" , items: [] } , {id : "Done" , items: [] }]
@@ -75,10 +88,8 @@ export default class Model{
         return JSON.parse(json);
     }
 
-    save = (data) => {
+    save(data){
         localStorage.setItem("kanban-data", JSON.stringify(data));
-        let datas = this.read()
-        console.log(datas)
     }
 }
 
