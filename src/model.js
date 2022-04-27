@@ -8,9 +8,6 @@ export default class Model{
         this.save(data)
     }
 
-
-
-
     getItems(){
         const data = this.read()
         return data
