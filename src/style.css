@@ -36,21 +36,21 @@ header {
     margin-top: 80px;
 }
 
-.ToDo {
+.ToDoMain {
     display: inline-block;
     width: 200px;
     height: 30px;
     border: 2px solid black;
 }
 
-.In_progress {
+.In_progressMain {
     display: inline-block;
     width: 200px;
     height: 30px;
     border: 2px solid black;
 }
 
-.Done {
+.DoneMain {정
     display: inline-block;
     width: 200px;
     height: 30px;
