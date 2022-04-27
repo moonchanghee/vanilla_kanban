@@ -19,14 +19,18 @@ import Modal from './view/Modal'
 export default class controller {
     constructor() {
         this.model = new Model()
+        this.modal_id
+        this.drop_id
         this.addEvent()
         this.onClickAddButton()
         this.onClickUpdateButton()
         this.onChangeSortSelect()
         this.onClickCloseModal()
-        this.onClickUpdateModal()
+        this.upDateModal()
+        // this.onClickUpdateModal()
         this.onClickDeleteButton()
         this.getItemList()
+        this.onRerender()
     }
 
 
@@ -35,12 +39,6 @@ export default class controller {
             this.dropzoneAddEvent(e)
         })
     }
-
-
-    // removeAllList(){
-    //
-    // }
-
 
 
 
@@ -53,7 +51,7 @@ export default class controller {
             }else if(sort_name == "sel_low"){
                 this.model.sortItemList("low")
             }
-            this.removeAllList()
+            this.onRerender()
         })
     }
 
@@ -78,11 +76,24 @@ export default class controller {
         })
     }
 
+    updateBtn(){
+        kanban_wrap.addEventListener('click',(e) => {
+            if(e.target.className ==  "upbtn"){
+                modal.classList.remove('hidden');
+                let updateData = this.model.selectItem(e.path[1].id)
+                title.value = updateData.item_title
+                modal_contents.value = updateData.item_content
+                date.value = updateData.item_date
+                console.log("수정버튼 클릭", e.path[1].id)
+                this.modal_id = e.path[1].id
+            }
+        })
+    }
 
-    upDateModal(id){
+    upDateModal(){
         modal.addEventListener('click',(e) => {
             let data = [{
-                id : id,
+                id : this.modal_id,
                 item_content : modal_contents.value,
                 item_title : title.value,
                 item_date :  date.value,
@@ -90,12 +101,11 @@ export default class controller {
                 item_priority : modal_priority.options[modal_priority.selectedIndex].text,
                 item_priority_val : modal_priority.options[modal_priority.selectedIndex].getAttribute("value")
             }]
-
-            if(e.target.className  == "succBtn"){
-                this.model.updateItem(id, data[0])
+            if(e.target.className  == "testUpBtn"){
+                this.model.updateItem(this.modal_id, data[0])
+                this.onRerender()
                 modal.classList.add('hidden');
 
-                // location.reload()
             }
         })
     }
@@ -108,29 +118,17 @@ export default class controller {
         })
     }
 
-    updateBtn(){
-        kanban_wrap.addEventListener('click',(e) => {
-            if(e.target.className ==  "upbtn"){
-                modal.classList.remove('hidden');
-                let updateData = this.model.selectItem(e.path[1].id)
-                title.value = updateData.item_title
-                modal_contents.value = updateData.item_content
-                date.value = updateData.item_date
-                this.upDateModal(e.path[1].id)
-            }
-    })
-    }
 
     deletBtn(){
             kanban_wrap.addEventListener('click',(e) => {
                     if(e.target.className ==  "delbtn"){
                         this.removeItem(e.path[1].id)
                     }})
-        }
+    }
 
     dragStart(node){
         node.childNodes[1].addEventListener("dragstart" , (e) => {
-            document.cookie = "drag_id" + "=" + e.target.id
+            this.drop_id = e.target.id
         })
         this.dropzoneAddEvent(node.childNodes[3])
     }
@@ -148,7 +146,7 @@ export default class controller {
             e.preventDefault();
             e.target.classList.remove("dropzone_active")
             var move_state = e.path[0].id
-            let pre_id = document.cookie.split('=')[1]
+            let pre_id = this.drop_id
             let data = this.model.selectItem(pre_id)
             if(data){
                 this.removeItem(pre_id)
@@ -202,8 +200,6 @@ export default class controller {
 
 
 
-
-
     onClickAddButton(){
         this.addItemBtn()
     }
@@ -220,37 +216,14 @@ export default class controller {
         this.closeModal()
     }
 
-    onClickUpdateModal(){
-        this.upDateModal()
-    }
-
     onClickDeleteButton(){
         this.deletBtn()
     }
+
+    onRerender(){
+        contents_todo.innerHTML = ""
+        contents_done.innerHTML = ""
+        contents_inprogress.innerHTML = ""
+        this.getItemList()
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

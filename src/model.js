@@ -6,7 +6,6 @@ export default class Model{
         const item = data.find(e => e.id == state)
         item.items.push(d)
         this.save(data)
-        // return this.read();
     }
 
 
@@ -34,14 +33,15 @@ export default class Model{
 
     updateItem(itemId , newData){
         const data = this.read()
+
         data.forEach((e) => {
             for(let i =0 ; i<e.items.length; i++){
                 if(e.items[i].id == itemId ){
                     e.items[i].item_content = newData.item_content
                     e.items[i].item_title = newData.item_title
                     e.items[i].item_date = newData.item_date
-                    // e.items[i].item_priority = newData.item_priority
-                    // e.items[i].item_state = newData.item_state
+                    e.items[i].item_priority = newData.item_priority
+                    e.items[i].item_state = newData.item_state
                 }
             }
         })
@@ -65,10 +65,10 @@ export default class Model{
     deleteItem(itemId) {
         const data = this.read();
         let chData
-        for (const column of data) {
-            chData = column.items.find(item => item.id == itemId);
+        for (const item of data) {
+            chData = item.items.find(e => e.id == itemId);
             if (chData) {
-                column.items.splice(column.items.indexOf(chData), 1);
+                item.items.splice(item.items.indexOf(chData), 1);
             }
         }
         this.save(data);
