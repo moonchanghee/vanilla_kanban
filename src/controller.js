@@ -11,20 +11,19 @@ const date = document.querySelector("#date")
 const kanban_wrap = document.querySelector(".kanban_wrap")
 const select = document.querySelector(".select")
 const dropzone = document.querySelectorAll(".dropzone")
-
 const closeBtn = document.querySelector(".closeBtn")
 const upSuccessBtn = document.querySelector(".upSuccessBtn")
 
-
 import Item from './view/Item'
 import Model from './model'
-import Modal from './view/Modal'
 
 export default class controller {
     constructor() {
         this.model = new Model()
         this.modal_id
         this.drop_id
+        this.pre_node
+        this.modal_state
         this.addEvent()
         this.onClickAddButton()
         this.onClickUpdateButton()
@@ -60,11 +59,11 @@ export default class controller {
     closeModal() {
         modal.addEventListener('click',(e) => {
             let state = modal_state.options[modal_state.selectedIndex].value
-            let data = this.getModalData(this.uuid())
             if(e.target.className ==  "closeBtn"){
                 if(this.checkData()){
                     alert(this.checkData())
                 }else{
+                    let data = this.getModalData(this.uuid())
                     this.model.insertItems(data[0],state)
                     this.addItems(data[0])
                     modal.classList.add('hidden');
@@ -84,8 +83,9 @@ export default class controller {
                 title.value = updateData.item_title
                 modal_contents.value = updateData.item_content
                 date.value = updateData.item_date
-                modal_priority.options[modal_priority.selectedIndex].text = updateData.item_priority
-                modal_state.options[modal_state.selectedIndex].text = updateData.item_state
+                // modal_priority.options[modal_priority.selectedIndex].text = updateData.item_priority
+                // modal_state.options[modal_state.selectedIndex].text = updateData.item_state
+                this.modal_state = updateData.item_state
                 this.modal_id = e.path[1].id
             }
         })
@@ -94,12 +94,17 @@ export default class controller {
     //수정 완료 이벤트 리스너
     upDateModal(){
         modal.addEventListener('click',(e) => {
-            let data = this.getModalData(this.modal_id)
             if(e.target.className  == "upSuccessBtn"){
                 if(this.checkData()){
                     alert(this.checkData())
                 }else{
-                    this.model.updateItem(this.modal_id, data[0])
+                    let data = this.getModalData(this.modal_id)
+                    if(this.modal_state != data[0].item_state){
+                        this.model.deleteItem(this.modal_id)
+                        this.model.insertItems(data[0], data[0].item_state)
+                    }else{
+                        this.model.updateItem(this.modal_id, data[0])
+                    }
                     this.onRerender()
                     modal.classList.add('hidden');
                     modal.classList.add('upSuccessBtn');
@@ -123,7 +128,6 @@ export default class controller {
         return data
     }
 
-
     //모달 오픈 버튼
     addItemBtn(){
         head_container.addEventListener('click',(e) => {
@@ -134,8 +138,8 @@ export default class controller {
                 modal_contents.value = ""
                 title.value = ""
                 date.value = ""
-                modal_state.options[modal_state.selectedIndex].text = modal_state.options[0].value
-                modal_priority.options[modal_priority.selectedIndex].text = modal_priority.options[0].value
+                // modal_state.options[modal_state.selectedIndex].text = modal_state.options[0].value
+                // modal_priority.options[modal_priority.selectedIndex].text = modal_priority.options[0].value
             }
         })
     }
@@ -148,14 +152,33 @@ export default class controller {
             }})
     }
 
+    //아이템 상태 분리
+    addItems(s) {
+        if ("ToDo" == s.item_state) {
+            this.newTodo(contents_todo, s)
+        } else if ("In_progress" == s.item_state) {
+            this.newTodo(contents_inprogress, s)
+        } else if("Done" == s.item_state) {
+            this.newTodo(contents_done, s)
+        }
+    }
+
+    //new 아이템 생성
+    newTodo (state, s) {
+        let addItem = document.createElement("div")
+        addItem.innerHTML = Item(s, s.item_state)
+        state.appendChild(addItem)
+        this.dragStart(addItem)
+    }
+
     //드래그 드랍 리스너
     dragStart(node){
-        node.childNodes[1].addEventListener("dragstart" , (e) => {
+        node.addEventListener("dragstart" , (e) => {
+            this.pre_node = e.path[1]
             this.drop_id = e.target.id
         })
         this.dropzoneAddEvent(node.childNodes[3])
     }
-
 
     dropzoneAddEvent(e){
         e.addEventListener("dragover" , (e) => {
@@ -172,13 +195,13 @@ export default class controller {
             let pre_id = this.drop_id
             let data = this.model.selectItem(pre_id)
             if(data){
-                this.removeItem(pre_id)
+                //렌더링
                 data.item_state = move_state
-                this.model.insertItems(data, move_state)
-                this.addItems(data)
+                this.removeItem(pre_id)
+                this.model.dropItemInsert(e.path[1].childNodes[1].getAttribute("id"),data)
+                this.onRerender()
             }
         })
-
     }
 
     //아이템리스트 렌더링
@@ -199,48 +222,20 @@ export default class controller {
          }
     }
 
-    //아이템 상태 분리
-    addItems(s) {
-        if ("ToDo" == s.item_state) {
-            this.newTodo(contents_todo, s)
-        } else if ("In_progress" == s.item_state) {
-            this.newTodo(contents_inprogress, s)
-        } else if("Done" == s.item_state) {
-            this.newTodo(contents_done, s)
-        }
-    }
-    //new 아이템 생성
-    newTodo (state, s) {
-        let addItem = document.createElement("div")
-        addItem.innerHTML = Item(s, s.item_state)
-        state.appendChild(addItem)
-        this.dragStart(state.appendChild(addItem))
-    }
-
-
     //유효성 검사
     checkData(){
         let reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/;
         if (reg.test(title.value)) {
-            return "제목에는 특수문자를 사용할 수 없습니다!"
-        }
-        else if (reg.test(modal_contents.value)) {
-            return "내용에는 특수문자를 사용할 수 없습니다!"
-        }
-
-        else if (title.value.length > 30) {
-            return "제목은 30자를 초과할 수 없습니다!"
-        }
-
-        else if (modal_contents.length > 150) {
+            return "제목에는 특수문자를 사용할 수 없습니다"
+        }else if (reg.test(modal_contents.value)) {
+            return "내용에는 특수문자를 사용할 수 없습니다"
+        }else if (title.value.length > 30) {
+            return "제목은 30자를 초과할 수 없습니다"
+        }else if (modal_contents.length > 150) {
             return "내용은 150자를 초과할 수 없습니다"
-        }
-
-        else if (modal_priority.options[modal_priority.selectedIndex].text === "선택") {
+        }else if (modal_priority.options[modal_priority.selectedIndex].text === "선택") {
             return "우선순위를 선택해주세요"
-        }
-
-        else if (modal_state.options[modal_state.selectedIndex].text === "선택") {
+        }else if (modal_state.options[modal_state.selectedIndex].text === "선택") {
             return "상태를 선택해주세요"
         }else{
             return 0
@@ -254,8 +249,6 @@ export default class controller {
             return v.toString(16);
         });
     }
-
-
 
     onClickAddButton(){
         this.addItemBtn()

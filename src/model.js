@@ -8,6 +8,28 @@ export default class Model{
         this.save(data)
     }
 
+    dropItemInsert(move_id,d){
+        const data = this.read()
+        let ch
+        const item = data.find(e => e.id == d.item_state)
+
+        if(move_id) {
+            data.forEach((e) => {
+                for (let i = 0; i < e.items.length; i++) {
+                    if (e.items[i].id == move_id) {
+                        ch = i
+                    }
+                }
+            }
+            )}
+        else{
+            ch = -1
+        }
+        item.items.splice(ch + 1, 0, d)
+        this.save(data)
+    }
+
+
     getItems(){
         const data = this.read()
         return data
@@ -16,6 +38,7 @@ export default class Model{
     selectItem(itemId){
         const data = this.read()
         let selectData
+
         data.forEach((e) => {
             for(let i =0 ; i<e.items.length; i++){
                 if(e.items[i].id == itemId ){
@@ -25,11 +48,12 @@ export default class Model{
             }
         })
     return selectData
-
     }
 
+    //코드 수정
     updateItem(itemId , newData){
         const data = this.read()
+
 
         data.forEach((e) => {
             for(let i =0 ; i<e.items.length; i++){
@@ -38,10 +62,11 @@ export default class Model{
                     e.items[i].item_title = newData.item_title
                     e.items[i].item_date = newData.item_date
                     e.items[i].item_priority = newData.item_priority
-                    e.items[i].item_state = newData.item_state
+                    e.items[i].item_priority_val = newData.item_priority_val
                 }
             }
         })
+
         this.save(data)
     }
 
@@ -70,7 +95,6 @@ export default class Model{
         }
         this.save(data);
     }
-
 
     read(){
         const json = localStorage.getItem("kanban-data");
