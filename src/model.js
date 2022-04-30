@@ -1,9 +1,9 @@
 
 export default class Model{
 
-    insertItems(d,state){
+    insertItems(d){
         const data = this.read();
-        const item = data.find(e => e.id == state)
+        const item = data.find(e => e.id == d.item_state)
         item.items.push(d)
         this.save(data)
     }
@@ -13,18 +13,13 @@ export default class Model{
         let ch
         const item = data.find(e => e.id == d.item_state)
 
-        if(move_id) {
             data.forEach((e) => {
                 for (let i = 0; i < e.items.length; i++) {
                     if (e.items[i].id == move_id) {
                         ch = i
-                    }
-                }
+                    }}
             }
-            )}
-        else{
-            ch = -1
-        }
+            )
         item.items.splice(ch + 1, 0, d)
         this.save(data)
     }
@@ -54,7 +49,6 @@ export default class Model{
     updateItem(itemId , newData){
         const data = this.read()
 
-
         data.forEach((e) => {
             for(let i =0 ; i<e.items.length; i++){
                 if(e.items[i].id == itemId ){
@@ -74,10 +68,10 @@ export default class Model{
         const data = this.read();
             data.forEach((e) => {
                 e.items.sort((a,b) => {
-                    if(s == "low"){
-                        return (Number(a.item_priority_val) - Number(b.item_priority_val))
-                    }else{
+                    if(s){
                         return (Number(b.item_priority_val) - Number(a.item_priority_val))
+                    }else{
+                        return (Number(a.item_priority_val) - Number(b.item_priority_val))
                     }
                 })
             })
