@@ -25,18 +25,21 @@
         <div class="content" >
             <div class="ToDoMain">
                 <div class = "item item-todo">ToDo</div>
-                <div class="dropzone" id = "ToDo"></div>
-                <div class="ToDo"></div>
+                <div class="ToDo">
+                    <div><div class="dropzone" id = "ToDo"></div></div>
+                </div>
             </div>
             <div class="In_progressMain">
                 <div class = "item item-inprogress">In Progress</div>
-                <div class="dropzone" id =  "In_progress"></div>
-                <div class="In_progress"></div>
+                <div class="In_progress">
+                    <div><div class="dropzone" id =  "In_progress"></div></div>
+                </div>
             </div>
             <div class="DoneMain">
                 <div class = "item item-done">Done</div>
-                <div class="dropzone" id = "Done"></div>
-                <div class="Done"></div>
+                <div class="Done">
+                    <div><div class="dropzone" id = "Done"></div></div>
+                </div>
             </div>
         </div>
     </div>
@@ -45,8 +48,9 @@
 
 
 <div class="modal hidden" >
-    <div class="modal-title">제목 : <input type="text" id = "title"></div>
-    <div class="modal-date">완료일 <input type="text" id = "date"> <button id = selectDate>달력선택</button></div>
+    <div class="modal-title">제목  <input type="text" id = "title"></div>
+    <div class="modal-date">완료일 <input type="text" id = "date">
+    </div>
     <div class="modal-selectbox">우선순위
         <select id = "modal-priority">
             <option selected>선택</option>
@@ -63,7 +67,7 @@
         </select>
     </div>
     <p><textarea cols="45" rows="10" id = "modal-conents"></textarea></p>
-    <div class = "closeBtn hidden" >전송완료</div>
+    <div class = "closeBtn hidden" >작성완료</div>
     <div class = "upSuccessBtn hidden" >수정완료</div>
 </div>
 </div>

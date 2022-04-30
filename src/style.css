@@ -41,6 +41,7 @@ header {
     width: 200px;
     height: 30px;
     border: 2px solid black;
+    overflow: auto;
 }
 
 .In_progressMain {
@@ -48,6 +49,7 @@ header {
     width: 200px;
     height: 30px;
     border: 2px solid black;
+    overflow: auto;
 }
 
 .DoneMain {
@@ -55,6 +57,7 @@ header {
     width: 200px;
     height: 30px;
     border: 2px solid black;
+    overflow: auto;
 }
 
 
@@ -106,34 +109,84 @@ header {
 .modal {
     position: absolute;
     background: white;
-    padding: 24px 16px;
+    padding: 20px 20px;
     top: 10%;
     left: 35%;
     width: 400px;
-    height: 300px;
-    border: 2px solid #f2b441;
+    height: 350px;
+    border: 2px solid black;
 
 }
 .modal-title {
-    font-size: 24px;
+    font-size: 23px;
     font-weight: bold;
+    margin-bottom: 15px;
+}
+.modal-date{
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
 
 .todoItem{
     border: 2px solid;
-    padding: 10px 10px;
-    margin: 2px 2px;
-    font-weight: bold;
+    margin: 1px 1px;
+    height: 120px;
+    background-color: white;
+    padding: 10px 50px;
 }
+.item_content{
+    display: inline-block;
+    float: left;
+}
+
+
+.item_button{
+    display: inline-block;
+    /*margin-top: 5px;*/
+    margin: 5px 5px;
+    float:right;
+
+}
+
+
 .dropzone{
     height: 7px;
     transition: background 0.15s, height 0.15s;
 }
 
 .dropzone_active {
-    height: 25px;
+    height: 30px;
     background: rgba(0, 0, 0, 0.25);
 }
 .hidden {
     display: none;
+}
+
+.closeBtn {
+    float: right;
+    margin-right: 25px;
+    width: 100px;
+    height: 45px;
+    font-size:20px;
+    color: white;
+    line-height: 50px;
+    text-align: center;
+    background: black;
+    border: solid 2px;
+    border-radius: 17px;
+}
+
+.upSuccessBtn {
+    float: right;
+    margin-right: 25px;
+    width: 100px;
+    height: 45px;
+    font-size:20px;
+    color: white;
+    line-height: 50px;
+    text-align: center;
+    background: black;
+    border: solid 2px;
+    border-radius: 17px;
 }
