@@ -93,6 +93,7 @@ export default class Model{
     read(){
         const json = localStorage.getItem("kanban-data");
         if (!json) {
+            // return [{id : "ToDo" , items: [{id:"ToDo" , item_state : "ToDo"}] } , {id : "In_progress" , items: [{id:"In_progress",item_state : "In_progress"}] } , {id : "Done" , items: [{id:"Done",item_state : "Done"}] }]
             return [{id : "ToDo" , items: [] } , {id : "In_progress" , items: [] } , {id : "Done" , items: [] }]
         }
 
