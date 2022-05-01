@@ -18,6 +18,7 @@ export default class View {
         this.select = document.querySelector(".select")
     }
 
+
     openAddModal() {
         this.closeBtn.classList.remove('hidden');
         this.modal.classList.remove('hidden');
@@ -25,6 +26,8 @@ export default class View {
         this.modal_contents.modal_contentsmodal_contentsvalue = ""
         this.title.value = ""
         this.date.value = ""
+        // this.modal_priority.options[0]
+        // this.modal_state.options[0]
     }
 
     //모달 닫기 리스너, 데이터 저장
@@ -45,8 +48,8 @@ export default class View {
         this.title.value = e.item_title
         this.modal_contents.value = e.item_content
         this.date.value = e.item_date
-        // modal_priority.options[modal_priority.selectedIndex].text = updateData.item_priority
-        // modal_state.options[modal_state.selectedIndex].text = updateData.item_state
+        this.modal_priority.options[0].text = e.item_priority
+        this.modal_state.options[0].text = e.item_state
     }
 
     //유효성 검사
@@ -99,21 +102,26 @@ export default class View {
     newTodo (state, data) {
         let addItem = document.createElement("div")
         addItem.setAttribute("id" , data.id)
+        const range = document.createRange();
+        const dropZone = range.createContextualFragment(`
+	 <div class = "dropzone" id = ${data.item_state}> </div>`).children[0];
         addItem.innerHTML = Item(data)
-
-        let dropZone = this.newDropzone(data.item_state)
         addItem.appendChild(dropZone)
         state.appendChild(addItem)
         return dropZone
     }
 
 
-    newDropzone(e){
+    newDropzone(state,e){
+        let addItem = document.createElement("div")
         const range = document.createRange();
         const dropZone = range.createContextualFragment(`
 	 <div class = "dropzone" id = ${e}> </div>`).children[0];
+        addItem.appendChild(dropZone)
+        state.appendChild(addItem)
         return dropZone
     }
+
 
 
     //유니크 아이디 생성
@@ -136,27 +144,25 @@ export default class View {
         }
     }
 
+
     updateBtn(){
         if(this.checkData()){
             alert(this.checkData())
         }else{
             this.modal.classList.add('hidden');
-            this.modal.classList.add('upSuccessBtn');
-            // this.onRerender()
         }
     }
-
 
 
     dragover(e){
         e.preventDefault();
         e.target.classList.add("dropzone_active")
     }
+
+
     dragleave(e){
         e.target.classList.remove("dropzone_active")
     }
-
-
 }
 
 
